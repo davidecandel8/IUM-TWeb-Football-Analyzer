@@ -1,0 +1,2087 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Football Analyzer API",
+    "description": "API documentation for the Football application. Reminder: If you want to try a particular route which requires two or more parameters, and you want to filter by one or two of them, just insert an empty string ('''') in the field you want to leave empty.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "main express server"
+    },
+    {
+      "url": "http://localhost:4000",
+      "description": "second express server"
+    },
+    {
+      "url": "http://localhost:8080",
+      "description": "springboot server"
+    }
+  ],
+  "paths": {
+    "/clubs/main/get_clubs": {
+      "get": {
+        "summary": "Get clubs from the main server",
+        "description": "Fetches the most popular clubs",
+        "responses": {
+          "200": {
+            "description": "A list of clubs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainClubs"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/clubs/main/get_filtered_clubs": {
+      "get": {
+        "summary": "Get filtered clubs from the main server",
+        "description": "Fetches clubs by name, competition or country",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "clubName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the club"
+          },
+          {
+            "in": "query",
+            "name": "competition",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The competition of the club"
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The country of the club"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of filtered clubs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainFilteredClubs"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No clubs found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/competitions/main/get_competitions": {
+      "get": {
+        "summary": "Get competitions from the main server",
+        "description": "Fetches the most popular competitions",
+        "responses": {
+          "200": {
+            "description": "A list of competitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainCompetitions"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/competitions/main/get_filtered_competitions": {
+      "get": {
+        "summary": "Get filtered competitions from the main server",
+        "description": "Fetches competitions by name,country or type",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "competitionName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the competition"
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The country of the competition"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The type of the competition"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of filtered competitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainFilteredCompetitions"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No competitions found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/competitions/main/get_ranking": {
+      "get": {
+        "summary": "Get ranking from the main server",
+        "description": "Fetches the raking of a specified domestic competition",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "selectedCompetition",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the competition"
+          },
+          {
+            "in": "query",
+            "name": "selectedYear",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The year of the competition"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The raking of the competition specified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainRanking"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/game_events/main/get_game_events": {
+      "get": {
+        "summary": "Get events from the main server",
+        "description": "Fetches the events occurred in a specified game",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "game_id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "The ID of the game"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of objects representing the events occurred in the game",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainGameEvents"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No events found for this game"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/game_lineups/main/get_game_lineups": {
+      "get": {
+        "summary": "Get game-lineups from the main server",
+        "description": "Fetches the game-lineups of a specified game",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "game_id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "The ID of the game"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of objects representing the game line-ups of the teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainGameLineups"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No lineups found for this game"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/games/main/get_games": {
+      "get": {
+        "summary": "Get games from the main server",
+        "description": "Fetches games by competition, year or round",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "selectedCompetition",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the competition"
+          },
+          {
+            "in": "query",
+            "name": "selectedYear",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The year of the competition"
+          },
+          {
+            "in": "query",
+            "name": "selectedRound",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The round of the competition"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of games",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainGames"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No games found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/players/main/get_default_players": {
+      "get": {
+        "summary": "Get players from the main server",
+        "description": "Fetches the most valuated players in the last football season",
+        "responses": {
+          "200": {
+            "description": "A list of players",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainDefaultPlayers"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+    "/players/main/get_filtered_players": {
+      "get": {
+        "summary": "Get filtered players from the main server",
+        "description": "Fetches players by name, team or position",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "playerName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the player"
+          },
+          {
+            "in": "query",
+            "name": "teamName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the team"
+          },
+          {
+            "in": "query",
+            "name": "position",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The position of the player"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of filtered players",
+
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MainFilteredPlayers"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No players found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:3000"]
+      }
+    },
+
+    "/appearances/express/get_goals_assists": {
+      "get": {
+        "summary": "Get goals and assists from the secondary express server",
+        "description": "Fetches and calculates the number of goals and assists for given player IDs. The route by itself could accept a different number of playerId but due to swagger restrictions, we use three Ids as example",
+        "parameters": [
+
+          {
+            "in": "query",
+            "name": "playerId1",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "ID of the first player"
+          },
+          {
+            "in": "query",
+            "name": "playerId2",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "ID of the second player"
+          },
+          {
+            "in": "query",
+            "name": "playerId3",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "ID of the third player"
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Goals and assists for each player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GoalsAssists"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:4000"]
+      }
+    },
+    "/game_events/express/get_game_events": {
+      "get": {
+        "summary": "Get events from the secondary express server",
+        "description": "Fetches the events occurred in a specified game",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "game_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the game"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of objects representing the event occurred in the game",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpressGameEvents"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No events found for this game"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:4000"]
+      }
+    },
+    "/game_lineups/express/get_game_lineups": {
+      "get": {
+        "summary": "Get game-lineups from the secondary express server",
+        "description": "Fetches the game-lineups of a specified game",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "game_id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "description": "The ID of the game"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of objects representing the game line-ups of the teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpressGameLineups"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No lineups found for this game"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:4000"]
+      }
+    },
+    "/games/express/get_games": {
+      "get": {
+        "summary": "Get games from the secondary express server",
+        "description": "Fetches games by competition, year or round",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "selectedCompetition",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the competition"
+          },
+          {
+            "in": "query",
+            "name": "selectedYear",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The year of the competition"
+          },
+          {
+            "in": "query",
+            "name": "selectedRound",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The round of the competition"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Limit the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of games",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpressGames"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No games found for this competition"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:4000"]
+      }
+    },
+    "/games/express/get_ranking": {
+      "get": {
+        "summary": "Get ranking from the secondary express server",
+        "description": "Fetches the raking of a specified domestic competition",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "selectedCompetition",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The ID of the competition"
+          },
+          {
+            "in": "query",
+            "name": "selectedYear",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The year of the competition"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The raking of the specified competition",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExpressRanking"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:4000"]
+      }
+    },
+
+    "/springboot/get_default_players": {
+      "get": {
+        "summary": "Get default players from the springboot server",
+        "description": "List of most valuable players in the last football season",
+        "parameters": [
+
+        ],
+        "responses": {
+            "200": {
+                "description": "List of players",
+                "content": {
+                "application/json": {
+                    "schema": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/SpringbootDefaultPlayers"
+                    }
+                    }
+                }
+                }
+            },
+            "500": {
+                "description": "Server error"
+            }
+
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_filtered_players": {
+      "get": {
+        "summary": "Get filtered players from the springboot server",
+        "description": "Fetches players by name, team or position",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "playerName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the player"
+          },
+          {
+            "in": "query",
+            "name": "teamName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the team"
+          },
+          {
+            "in": "query",
+            "name": "position",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The position of the player"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The limit for the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of filtered players",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SpringbootFilteredPlayers"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No players found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_player_names": {
+      "get": {
+        "summary": "Get players names from the springboot server",
+        "description": "List of player names",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "player_ids",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "description": "List of player IDs"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of player names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlayerNames"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No player found matching the provided IDs"
+          },
+          "500": {
+            "description": "Server error"
+          }
+
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_competitions": {
+      "get": {
+        "summary": "Get competitions from the springboot server",
+        "description": "Fetches the top competitions",
+        "responses": {
+          "200": {
+            "description": "A list of competitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SpringbootCompetitions"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_filtered_competitions": {
+      "get": {
+        "summary": "Get filtered competitions from the springboot server",
+        "description": "Fetches competitions filtered by name, country and type",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "competitionName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the competition"
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The country of the competition"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The type of the competition"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The limit for the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of filtered competitions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SpringbootFilteredCompetitions"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No competitions found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_clubs": {
+      "get": {
+        "summary": "Get clubs from the springboot server",
+        "description": "Fetches the top clubs",
+        "responses": {
+          "200": {
+            "description": "A list clubs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SpringbootClubs"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_filtered_clubs": {
+      "get": {
+        "summary": "Get filtered clubs from the springboot server",
+        "description": "Fetches clubs filtered by name, competition and country",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "clubName",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The name of the club"
+          },
+          {
+            "in": "query",
+            "name": "competition",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The competition of the club"
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The country of the club"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The limit for the number of results"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of filtered clubs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SpringbootFilteredClubs"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No clubs found matching the provided filters"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:8080"]
+      }
+    },
+    "/springboot/get_club_names": {
+      "get": {
+        "summary": "Get clubs names from the springboot server",
+        "description": "Fetches club names by their IDs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "club_ids",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "description": "List of club IDs"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of club names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClubNames"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "tags": ["localhost:8080"]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MainClubs": {
+        "type": "object",
+        "properties": {
+          "club_id": {
+            "type": "integer",
+            "example": 31
+          },
+          "name": {
+            "type": "string",
+            "example": "Liverpool Football Club"
+          },
+          "domestic_competition_id": {
+            "type": "string",
+            "example": "GB1"
+          },
+          "domestic_competition_name": {
+            "type": "string",
+            "example": "premier-league"
+          },
+          "squad_size": {
+            "type": "integer",
+            "example": 26
+          },
+          "average_age": {
+            "type": "number",
+            "format": "float",
+            "example": 26.2
+          },
+          "foreigners_number": {
+            "type": "integer",
+            "example": 21
+          },
+          "foreigners_percentage": {
+            "type": "number",
+            "format": "float",
+            "example": 80.8
+          },
+          "national_team_players": {
+            "type": "integer",
+            "example": 17
+          },
+          "stadium_name": {
+            "type": "string",
+            "example": "Anfield"
+          },
+          "stadium_seats": {
+            "type": "integer",
+            "example": 54074
+          },
+          "net_transfer_record": {
+            "type": "string",
+            "example": "€-111.30m"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2023
+          }
+        }
+      },
+      "MainFilteredClubs": {
+        "type": "object",
+        "properties": {
+          "club_id": {
+            "type": "integer",
+            "example": 506
+          },
+          "name": {
+            "type": "string",
+            "example": "Juventus Football Club"
+          },
+          "domestic_competition_id": {
+            "type": "string",
+            "example": "IT1"
+          },
+          "domestic_competition_name": {
+            "type": "string",
+            "example": "serie-a"
+          },
+          "squad_size": {
+            "type": "integer",
+            "example": 26
+          },
+          "average_age": {
+            "type": "number",
+            "format": "float",
+            "example": 26.7
+          },
+          "foreigners_number": {
+            "type": "integer",
+            "example": 14
+          },
+          "foreigners_percentage": {
+            "type": "number",
+            "format": "float",
+            "example": 53.8
+          },
+          "national_team_players": {
+            "type": "integer",
+            "example": 16
+          },
+          "stadium_name": {
+            "type": "string",
+            "example": "Allianz Stadium"
+          },
+          "stadium_seats": {
+            "type": "integer",
+            "example": 41507
+          },
+          "net_transfer_record": {
+            "type": "string",
+            "example": "€-21.60m"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2023
+          }
+        }
+      },
+      "MainCompetitions": {
+        "type": "object",
+        "properties": {
+          "competition_id": {
+            "type": "string",
+            "example": "EL"
+          },
+          "competition_name": {
+            "type": "string",
+            "example": "europa-league"
+          },
+          "sub_type": {
+            "type": "string",
+            "example": "europa_league"
+          },
+          "type": {
+            "type": "string",
+            "example": "international_cup"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": -1
+          },
+          "country_name": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          },
+          "confederation": {
+            "type": "string",
+            "example": "europa"
+          }
+        }
+      },
+      "MainFilteredCompetitions": {
+        "type": "object",
+        "properties": {
+          "competition_id": {
+            "type": "string",
+            "example": "EL"
+          },
+          "competition_name": {
+            "type": "string",
+            "example": "europa-league"
+          },
+          "sub_type": {
+            "type": "string",
+            "example": "europa_league"
+          },
+          "type": {
+            "type": "string",
+            "example": "international_cup"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": -1
+          },
+          "country_name": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          },
+          "confederation": {
+            "type": "string",
+            "example": "europa"
+          }
+        }
+      },
+      "MainRanking": {
+        "type": "object",
+        "properties": {
+          "ClubId": {
+            "type": "integer",
+            "example": 46
+          },
+          "Club": {
+            "type": "string",
+            "example": "Football Club Internazionale Milano S.p.A."
+          },
+          "Points": {
+            "type": "integer",
+            "example": 32
+          },
+          "GamesPlayed": {
+            "type": "integer",
+            "example": 13
+          },
+          "GoalsScored": {
+            "type": "integer",
+            "example": 30
+          },
+          "GoalsConceded": {
+            "type": "integer",
+            "example": 7
+          },
+          "GoalsDifference": {
+            "type": "integer",
+            "example": 23
+          }
+        }
+      },
+      "MainGameEvents": {
+        "type": "object",
+        "properties": {
+          "game_id": {
+            "type": "integer",
+            "example": 2423328
+
+          },
+          "minute": {
+            "type": "integer",
+            "example": 17
+          },
+          "type": {
+            "type": "string",
+            "example": "Goals"
+          },
+          "club_id": {
+            "type": "integer",
+            "example": 6195
+          },
+          "description": {
+            "type": "string",
+            "example": "Right-footed shot"
+          },
+          "player_id": {
+            "type": "integer",
+            "example": 39153
+          },
+          "player_name": {
+            "type": "string",
+            "example": "Gonzalo Higuaín"
+          },
+          "player_in_id": {
+            "type": "integer",
+            "example": 56416
+          },
+          "player_in_name": {
+            "type": "string",
+            "example": "Dries Mertens"
+          },
+          "player_assist_id": {
+            "type": "integer",
+            "example": 130365
+          },
+          "player_assist_name": {
+            "type": "string",
+            "example": "Alessandro Florenzi"
+          }
+        }
+      },
+      "MainGameLineups": {
+        "type": "object",
+        "properties": {
+          "game_id": {
+            "type": "integer",
+            "example": 4082955
+          },
+          "club_id": {
+            "type": "integer",
+            "example": 234
+          },
+          "type": {
+            "type": "string",
+            "example": "starting_lineup"
+          },
+          "number": {
+            "type": "integer",
+            "example": 1
+          },
+          "player_id": {
+            "type": "integer",
+            "example": 315121
+          },
+          "player_image_url": {
+            "type": "string",
+            "example": "https://img.a.transfermarkt.technology/portrait/header/315121-1676465549.jpg?lm=1"
+          },
+          "player_name": {
+            "type": "string",
+            "example":  "Justin Bijlow"
+          },
+          "team_captain": {
+            "type": "integer",
+            "example": 0
+          },
+          "position": {
+            "type": "string",
+            "example": "Goalkeeper"
+          }
+        }
+      },
+      "MainGames": {
+        "type": "object",
+        "properties": {
+          "game_id": {
+            "type": "integer",
+            "example": 2814762
+          },
+          "home_club_id": {
+            "type": "integer",
+            "example": 6195
+          },
+          "away_club_id": {
+            "type": "integer",
+            "example": 430
+          },
+          "home_club_name": {
+            "type": "string",
+            "example":"Società Sportiva Calcio Napoli"
+          },
+          "away_club_name": {
+            "type": "string",
+            "example": "Associazione Calcio Fiorentina"
+          },
+          "home_club_goals": {
+            "type": "integer",
+            "example": 1
+          },
+          "away_club_goals": {
+            "type": "string",
+            "example": 0
+          }
+        }
+      },
+      "MainDefaultPlayers": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "integer",
+            "example": 418560
+          },
+          "name": {
+            "type": "string",
+            "example": "Erling Haaland"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2023
+          },
+          "club": {
+            "type": "string",
+            "example": "Manchester City Football Club"
+          },
+          "position": {
+            "type": "string",
+            "example": "Attack"
+          },
+          "img_url": {
+            "type": "string",
+            "example": "https://img.a.transfermarkt.technology/portrait/header/418560-1694590614.jpg?lm=1"
+          },
+          "sub_position": {
+            "type": "string",
+            "example": "Centre-Forward"
+          },
+          "age": {
+            "type": "integer",
+            "example": 23
+          },
+          "height": {
+            "type": "integer",
+            "example": 195
+          },
+          "foot": {
+            "type": "string",
+            "example": "Left"
+          },
+          "citizenship": {
+            "type": "string",
+            "example": "Norway"
+          },
+          "value_date": {
+            "type": "string",
+            "example": "2023"
+          },
+          "highest_market_value": {
+            "type": "integer",
+            "example": 180000000
+          }
+        }
+      },
+      "MainFilteredPlayers": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "integer",
+            "example": 442531
+          },
+          "name": {
+            "type": "string",
+            "example": "Edouard Mendy"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2022
+          },
+          "club": {
+            "type": "string",
+            "example": "Chelsea Football Club"
+          },
+          "position": {
+            "type": "string",
+            "example": "Goalkeeper"
+          },
+          "img_url": {
+            "type": "string",
+            "example": "https://img.a.transfermarkt.technology/portrait/header/442531-1600951863.jpg?lm=1"
+          },
+          "sub_position": {
+            "type": "string",
+            "example": "Goalkeeper"
+          },
+          "age": {
+            "type": "integer",
+            "example": 32
+          },
+          "height": {
+            "type": "integer",
+            "example": 194
+          },
+          "foot": {
+            "type": "string",
+            "example": "Right"
+          },
+          "citizenship": {
+            "type": "string",
+            "example": "Senegal"
+          },
+          "value_date": {
+            "type": "string",
+            "example": "2021"
+          },
+          "highest_market_value": {
+            "type": "integer",
+            "example": 32000000
+          }
+        }
+      },
+
+      "GoalsAssists": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "integer",
+            "example": 342229
+          },
+          "goals": {
+            "type": "integer",
+            "example": 222
+          },
+          "assists": {
+            "type": "integer",
+            "example": 93
+          }
+        }
+      },
+      "ExpressGameEvents": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "65eb025abd16e193a3b9c9d8"
+
+          },
+          "date": {
+            "type": "string",
+            "example": "2014-02-05T00:00:00.000Z"
+          },
+          "game_id": {
+            "type": "integer",
+            "example": 2423328
+
+          },
+          "minute": {
+            "type": "integer",
+            "example": 17
+          },
+          "type": {
+            "type": "string",
+            "example": "Goals"
+          },
+          "club_id": {
+            "type": "integer",
+            "example": 6195
+          },
+          "player_id": {
+            "type": "integer",
+            "example": 39153
+          },
+          "description": {
+            "type": "string",
+            "example": "Right-footed shot"
+          },
+          "player_in_id": {
+            "type": "integer",
+            "example": 56416
+          },
+          "player_assist_id": {
+            "type": "integer",
+            "example": 130365
+          }
+        }
+      },
+      "ExpressGameLineups": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "65eb028abd16e193a3c1dbd0"
+          },
+          "game_id": {
+            "type": "integer",
+            "example": 4082955
+          },
+          "club_id": {
+            "type": "integer",
+            "example": 234
+          },
+          "type": {
+            "type": "string",
+            "example": "starting_lineup"
+          },
+          "number": {
+            "type": "integer",
+            "example": 1
+          },
+          "player_id": {
+            "type": "integer",
+            "example": 315121
+          },
+          "player_name": {
+            "type": "string",
+            "example":  "Justin Bijlow"
+          },
+          "team_captain": {
+            "type": "integer",
+            "example": 0
+          },
+          "position": {
+            "type": "string",
+            "example": "Goalkeeper"
+          }
+        }
+      },
+      "ExpressGames": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "65eb016dbd16e193a39faca2"
+          },
+          "game_id": {
+            "type": "integer",
+            "example": 2814762
+          },
+          "home_club_id": {
+            "type": "integer",
+            "example": 6195
+          },
+          "away_club_id": {
+            "type": "integer",
+            "example": 430
+          },
+          "home_club_goals": {
+            "type": "integer",
+            "example": 1
+          },
+          "away_club_goals": {
+            "type": "string",
+            "example": 0
+          }
+        }
+      },
+      "ExpressRanking": {
+        "type": "object",
+        "properties": {
+          "ClubId": {
+            "type": "integer",
+            "example": 46
+          },
+          "Club": {
+            "type": "string",
+            "example": "Football Club Internazionale Milano S.p.A."
+          },
+          "Points": {
+            "type": "integer",
+            "example": 32
+          },
+          "GamesPlayed": {
+            "type": "integer",
+            "example": 13
+          },
+          "GoalsScored": {
+            "type": "integer",
+            "example": 30
+          },
+          "GoalsConceded": {
+            "type": "integer",
+            "example": 7
+          },
+          "GoalsDifference": {
+            "type": "integer",
+            "example": 23
+          }
+        }
+      },
+
+      "SpringbootDefaultPlayers": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "integer",
+            "example": 418560
+          },
+          "name": {
+            "type": "string",
+            "example": "Erling Haaland"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2023
+          },
+          "club": {
+            "type": "string",
+            "example": "Manchester City Football Club"
+          },
+          "position": {
+            "type": "string",
+            "example": "Attack"
+          },
+          "img_url": {
+            "type": "string",
+            "example": "https://img.a.transfermarkt.technology/portrait/header/418560-1694590614.jpg?lm=1"
+          },
+          "sub_position": {
+            "type": "string",
+            "example": "Centre-Forward"
+          },
+          "age": {
+            "type": "integer",
+            "example": 23
+          },
+          "height": {
+            "type": "integer",
+            "example": 195
+          },
+          "foot": {
+            "type": "string",
+            "example": "Left"
+          },
+          "citizenship": {
+            "type": "string",
+            "example": "Norway"
+          },
+          "value_date": {
+            "type": "string",
+            "example": "2023"
+          },
+          "highest_market_value": {
+            "type": "integer",
+            "example": 180000000
+          }
+        }
+      },
+      "SpringbootFilteredPlayers": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "integer",
+            "example": 442531
+          },
+          "name": {
+            "type": "string",
+            "example": "Edouard Mendy"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2022
+          },
+          "club": {
+            "type": "string",
+            "example": "Chelsea Football Club"
+          },
+          "position": {
+            "type": "string",
+            "example": "Goalkeeper"
+          },
+          "img_url": {
+            "type": "string",
+            "example": "https://img.a.transfermarkt.technology/portrait/header/442531-1600951863.jpg?lm=1"
+          },
+          "sub_position": {
+            "type": "string",
+            "example": "Goalkeeper"
+          },
+          "age": {
+            "type": "integer",
+            "example": 32
+          },
+          "height": {
+            "type": "integer",
+            "example": 194
+          },
+          "foot": {
+            "type": "string",
+            "example": "Right"
+          },
+          "citizenship": {
+            "type": "string",
+            "example": "Senegal"
+          },
+          "value_date": {
+            "type": "string",
+            "example": "2021"
+          },
+          "highest_market_value": {
+            "type": "integer",
+            "example": 32000000
+          }
+        }
+      },
+      "PlayerNames": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "integer",
+            "example": 342229
+          },
+          "name": {
+            "type": "string",
+            "example": "Kylian Mbappé"
+          },
+          "image_url": {
+            "type": "string",
+            "example": "https://img.a.transfermarkt.technology/portrait/header/342229-1682683695.jpg?lm=1"
+          }
+        }
+      },
+      "SpringbootCompetitions": {
+        "type": "object",
+        "properties": {
+          "competition_id": {
+            "type": "string",
+            "example": "ES1"
+          },
+          "competition_name": {
+            "type": "string",
+            "example": "laliga"
+          },
+          "sub_type": {
+            "type": "string",
+            "example": "first_tier"
+          },
+          "type": {
+            "type": "string",
+            "example": "domestic_league"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 157
+          },
+          "country_name": {
+            "type": "string",
+            "example": "Spain"
+          },
+          "confederation": {
+            "type": "string",
+            "example": "europa"
+          }
+        }
+      },
+      "SpringbootFilteredCompetitions": {
+        "type": "object",
+        "properties": {
+          "competition_id": {
+            "type": "string",
+            "example": "SUC"
+          },
+          "competition_name": {
+            "type": "string",
+            "example": "supercopa"
+          },
+          "sub_type": {
+            "type": "string",
+            "example": "domestic_super_cup"
+          },
+          "type": {
+            "type": "string",
+            "example": "other"
+          },
+          "country_id": {
+            "type": "integer",
+            "example": 157
+          },
+          "country_name": {
+            "type": "string",
+            "example": "Spain"
+          },
+          "confederation": {
+            "type": "string",
+            "example": "europa"
+          }
+        }
+      },
+      "SpringbootClubs": {
+        "type": "object",
+        "properties": {
+          "club_id": {
+            "type": "integer",
+            "example": 31
+          },
+          "name": {
+            "type": "string",
+            "example": "Liverpool Football Club"
+          },
+          "domestic_competition_id": {
+            "type": "string",
+            "example": "GB1"
+          },
+          "domestic_competition_name": {
+            "type": "string",
+            "example": "premier-league"
+          },
+          "squad_size": {
+            "type": "integer",
+            "example": 26
+          },
+          "average_age": {
+            "type": "number",
+            "format": "float",
+            "example": 26.2
+          },
+          "foreigners_number": {
+            "type": "integer",
+            "example": 21
+          },
+          "foreigners_percentage": {
+            "type": "number",
+            "format": "float",
+            "example": 80.8
+          },
+          "national_team_players": {
+            "type": "integer",
+            "example": 17
+          },
+          "stadium_name": {
+            "type": "string",
+            "example": "Anfield"
+          },
+          "stadium_seats": {
+            "type": "integer",
+            "example": 54074
+          },
+          "net_transfer_record": {
+            "type": "string",
+            "example": "€-111.30m"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2023
+          }
+        }
+      },
+      "SpringbootFilteredClubs": {
+        "type": "object",
+        "properties": {
+          "club_id": {
+            "type": "integer",
+            "example": 506
+          },
+          "name": {
+            "type": "string",
+            "example": "Juventus Football Club"
+          },
+          "domestic_competition_id": {
+            "type": "string",
+            "example": "IT1"
+          },
+          "domestic_competition_name": {
+            "type": "string",
+            "example": "serie-a"
+          },
+          "squad_size": {
+            "type": "integer",
+            "example": 26
+          },
+          "average_age": {
+            "type": "number",
+            "format": "float",
+            "example": 26.7
+          },
+          "foreigners_number": {
+            "type": "integer",
+            "example": 14
+          },
+          "foreigners_percentage": {
+            "type": "number",
+            "format": "float",
+            "example": 53.8
+          },
+          "national_team_players": {
+            "type": "integer",
+            "example": 16
+          },
+          "stadium_name": {
+            "type": "string",
+            "example": "Allianz Stadium"
+          },
+          "stadium_seats": {
+            "type": "integer",
+            "example": 41507
+          },
+          "net_transfer_record": {
+            "type": "string",
+            "example": "€-21.60m"
+          },
+          "last_season": {
+            "type": "integer",
+            "example": 2023
+          }
+        }
+      },
+      "ClubNames": {
+        "type": "object",
+        "properties": {
+          "club_id": {
+            "type": "integer",
+            "example": 506
+          },
+          "club_name": {
+            "type": "string",
+            "example": "Juventus Football Club"
+          }
+        }
+      }
+    }
+  }
+}

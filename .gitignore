@@ -1,0 +1,5 @@
+*.csv
+*.vscode/
+Assignment Data 2023-2024/
+**/node_modules
+.DS_Store
